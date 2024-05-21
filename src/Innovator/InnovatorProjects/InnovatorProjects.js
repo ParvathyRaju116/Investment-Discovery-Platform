@@ -19,6 +19,7 @@ import useApi from "../../hooks/useApi";
 import { endpoints } from "../../services/defaults";
 import CreatableSelect from "react-select/creatable";
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import { Update } from "@mui/icons-material";
 
 function InnovatorProjects() {
   const [iPreviews, setIPreviews] = useState([]);
@@ -204,7 +205,7 @@ function InnovatorProjects() {
     getProjects();
   }, []);
 
-  const handleUpdate = async (e,id) => {
+  const handleUpdate = async (e) => {
     const formData = new FormData();
     formData.append("project_name", projectData.project_name);
     formData.append("description", projectData.description);
@@ -214,11 +215,16 @@ function InnovatorProjects() {
     formData.append("category", projectData.category);
  let apiResponse;
 
- const url=`${endpoints.EDIT_PROJECT}${id}`
+ const url=`${endpoints.EDIT_PROJECT}${projectData.id}`
  try {
-  apiResponse=await editInnovatorProject(url,formData,id)
+ const { response, error } =await editInnovatorProject(url,formData)
+  if(!error && response){
+    console.log(response);
+    alert("Updated Successfully")
+  }
+
  } catch (error) {
-  
+  console.log(error);
  }
   };
 
@@ -428,9 +434,12 @@ function InnovatorProjects() {
           <Button variant="dark" onClick={() => setShow(false)}>
             Close
           </Button>
-          <Button variant="outline-dark" onClick={addProject}>
-            {isEditForm ? "Update" : "Add"}
-          </Button>
+         
+            
+          
+         
+            {isEditForm ?  <Button variant="outline-dark" onClick={handleUpdate} >Update Project</Button>:  <Button variant="outline-dark" onClick={addProject}>Add Project</Button>}
+          
         </Modal.Footer>
       </Modal>
       <ToastContainer />
