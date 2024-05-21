@@ -18,5 +18,6 @@ export const endpoints = {
   ADD_CATEGORY:`category/`,
   PROJECT_VIEW:`projectview/`,
   GET_INNOVATOR_PROJECTS:`project/`,
-  DELETE_PROJECT:`project/`
+  DELETE_PROJECT:`project/`,
+  EDIT_PROJECT:`project/`
 };

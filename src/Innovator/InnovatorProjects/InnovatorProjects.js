@@ -32,6 +32,8 @@ function InnovatorProjects() {
   const { request: addProjects } = useApi("mPost");
   const { request: getInnovatorProjects } = useApi("hget");
   const { request: deleteInnovatorProject } = useApi("delete");
+  const { request: editInnovatorProject } = useApi("mput");
+
 
   const [photo, setPhoto] = useState(null);
   const [projectData, setProjectData] = useState({
@@ -42,6 +44,8 @@ function InnovatorProjects() {
     end_date: "",
     image: "",
   });
+
+  const [inputValue, setInputValue] = useState('');
 
   console.log(projectData);
 
@@ -65,9 +69,12 @@ function InnovatorProjects() {
     }
   };
 
-  const showEditForm = () => {
+  const showEditForm = (project) => {
     setIsEditForm(true);
     setShow(true);
+    setPhoto(null)
+    console.log(project);
+    setProjectData(project)
   };
 
   const showAddProjectForm = () => {
@@ -144,11 +151,12 @@ function InnovatorProjects() {
     if (actionMeta.action === "create-option") {
       try {
         const url = endpoints.ADD_CATEGORY;
-        const newCategory = { c_name: newValue.value };
+        const newCategory = { c_name: newValue.label };
         const { response, error } = await addCategory(url, newCategory);
         if (!error && response) {
-          setCat([...cat, response.data]);
-          setProjectData({ ...projectData, category: response.data.id });
+          const createdCategory = response.data;
+          setCat([...cat, createdCategory]);
+          setProjectData({ ...projectData, category: createdCategory.id });
         }
       } catch (error) {
         console.log(error);
@@ -196,7 +204,23 @@ function InnovatorProjects() {
     getProjects();
   }, []);
 
-  const handleUpdate = async () => {};
+  const handleUpdate = async (e,id) => {
+    const formData = new FormData();
+    formData.append("project_name", projectData.project_name);
+    formData.append("description", projectData.description);
+    formData.append("amount", projectData.amount);
+    formData.append("end_date", projectData.end_date)
+    formData.append("image", projectData.image);
+    formData.append("category", projectData.category);
+ let apiResponse;
+
+ const url=`${endpoints.EDIT_PROJECT}${id}`
+ try {
+  apiResponse=await editInnovatorProject(url,formData,id)
+ } catch (error) {
+  
+ }
+  };
 
   return (
     <>
@@ -242,7 +266,7 @@ function InnovatorProjects() {
                           </label>
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={showEditForm}>
+                          <Dropdown.Item onClick={(e)=>showEditForm(project)}>
                             Edit
                           </Dropdown.Item>
                           <Dropdown.Item
@@ -314,7 +338,7 @@ function InnovatorProjects() {
                   onChange={handleImage}
                 />
                 <img
-                  src={photo ? URL.createObjectURL(photo) : uploadImage}
+                  src={photo ? URL.createObjectURL(photo) : `http://127.0.0.1:8000/${projectData.image}`}
                   alt="Cover Image Upload"
                   height={200}
                   className="border border-black p-3"
@@ -389,6 +413,12 @@ function InnovatorProjects() {
             <CreatableSelect
               options={options}
               onChange={handleCategoryChange}
+              inputValue={inputValue}
+              onInputChange={(newValue, actionMeta) => {
+                if (actionMeta.action === 'input-change') {
+                  setInputValue(newValue);
+                }
+              }}
               placeholder="Select or create category"
             />
           </div>
@@ -399,7 +429,7 @@ function InnovatorProjects() {
             Close
           </Button>
           <Button variant="outline-dark" onClick={addProject}>
-            Add
+            {isEditForm ? "Update" : "Add"}
           </Button>
         </Modal.Footer>
       </Modal>
