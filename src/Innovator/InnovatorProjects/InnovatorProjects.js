@@ -35,7 +35,6 @@ function InnovatorProjects() {
   const { request: deleteInnovatorProject } = useApi("delete");
   const { request: editInnovatorProject } = useApi("mput");
 
-
   const [photo, setPhoto] = useState(null);
   const [projectData, setProjectData] = useState({
     project_name: "",
@@ -46,7 +45,7 @@ function InnovatorProjects() {
     image: "",
   });
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
 
   console.log(projectData);
 
@@ -73,9 +72,9 @@ function InnovatorProjects() {
   const showEditForm = (project) => {
     setIsEditForm(true);
     setShow(true);
-    setPhoto(null)
+    setPhoto(null);
     console.log(project);
-    setProjectData(project)
+    setProjectData(project);
   };
 
   const showAddProjectForm = () => {
@@ -210,22 +209,21 @@ function InnovatorProjects() {
     formData.append("project_name", projectData.project_name);
     formData.append("description", projectData.description);
     formData.append("amount", projectData.amount);
-    formData.append("end_date", projectData.end_date)
+    formData.append("end_date", projectData.end_date);
     formData.append("image", projectData.image);
     formData.append("category", projectData.category);
- let apiResponse;
+    let apiResponse;
 
- const url=`${endpoints.EDIT_PROJECT}${projectData.id}`
- try {
- const { response, error } =await editInnovatorProject(url,formData)
-  if(!error && response){
-    console.log(response);
-    alert("Updated Successfully")
-  }
-
- } catch (error) {
-  console.log(error);
- }
+    const url = `${endpoints.EDIT_PROJECT}${projectData.id}`;
+    try {
+      const { response, error } = await editInnovatorProject(url, formData);
+      console.log(response);
+      if (!error && response) {
+        alert("Updated Successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -272,7 +270,7 @@ function InnovatorProjects() {
                           </label>
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={(e)=>showEditForm(project)}>
+                          <Dropdown.Item onClick={(e) => showEditForm(project)}>
                             Edit
                           </Dropdown.Item>
                           <Dropdown.Item
@@ -344,7 +342,11 @@ function InnovatorProjects() {
                   onChange={handleImage}
                 />
                 <img
-                  src={photo ? URL.createObjectURL(photo) : `http://127.0.0.1:8000/${projectData.image}`}
+                  src={
+                    photo
+                      ? URL.createObjectURL(photo)
+                      : `http://127.0.0.1:8000/${projectData.image}`
+                  }
                   alt="Cover Image Upload"
                   height={200}
                   className="border border-black p-3"
@@ -416,17 +418,30 @@ function InnovatorProjects() {
                 </FloatingLabel>
               </Col>
             </Row>
-            <CreatableSelect
-              options={options}
-              onChange={handleCategoryChange}
-              inputValue={inputValue}
-              onInputChange={(newValue, actionMeta) => {
-                if (actionMeta.action === 'input-change') {
-                  setInputValue(newValue);
-                }
-              }}
-              placeholder="Select or create category"
-            />
+
+            {isEditForm ? (
+              <CreatableSelect
+                options={options}
+                onChange={handleCategoryChange}
+                onInputChange={(newValue, actionMeta) => {
+                  if (actionMeta.action === "input-change") {
+                    setInputValue(newValue);
+                  }
+                }}
+                placeholder="Select or create category"
+              />
+            ) : (
+              <CreatableSelect
+                options={options}
+                onChange={handleCategoryChange}
+                onInputChange={(newValue, actionMeta) => {
+                  if (actionMeta.action === "input-change") {
+                    setInputValue(newValue);
+                  }
+                }}
+                placeholder="Select or create category"
+              />
+            )}
           </div>
           <hr />
         </Modal.Body>
@@ -434,12 +449,16 @@ function InnovatorProjects() {
           <Button variant="dark" onClick={() => setShow(false)}>
             Close
           </Button>
-         
-            
-          
-         
-            {isEditForm ?  <Button variant="outline-dark" onClick={handleUpdate} >Update Project</Button>:  <Button variant="outline-dark" onClick={addProject}>Add Project</Button>}
-          
+
+          {isEditForm ? (
+            <Button variant="outline-dark" onClick={handleUpdate}>
+              Update Project
+            </Button>
+          ) : (
+            <Button variant="outline-dark" onClick={addProject}>
+              Add Project
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
       <ToastContainer />
