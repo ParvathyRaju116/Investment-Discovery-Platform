@@ -19,5 +19,5 @@ export const endpoints = {
   PROJECT_VIEW:`projectview/`,
   GET_INNOVATOR_PROJECTS:`project/`,
   DELETE_PROJECT:`project/`,
-  UPDATE_PROJECT:`update/`
+  UPDATE_PROJECT:`update/`,
 };
