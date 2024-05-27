@@ -13,6 +13,7 @@ import { endpoints } from "../../services/defaults";
 import useApi from "../../hooks/useApi";
 import "./InnovatorProject.css";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import CardSkeleton from "../../CommonComponents/Card Skeleton/CardSkeleton";
 
 function ProjectView() {
   const [project, setProject] = useState(null);
@@ -58,7 +59,7 @@ function ProjectView() {
 
   console.log(updateInput);
 
-  if (!project) return <div>Loading...</div>;
+  if (!project) return <div><CardSkeleton/></div>;
 
   const handleUpdate=async(e)=>{
     try {
