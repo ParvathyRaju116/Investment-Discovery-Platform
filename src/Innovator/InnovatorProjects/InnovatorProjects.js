@@ -20,6 +20,7 @@ import { endpoints } from "../../services/defaults";
 import CreatableSelect from "react-select/creatable";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import CardSkeleton from "../../CommonComponents/Card Skeleton/CardSkeleton";
+import { Update } from "@mui/icons-material";
 
 function InnovatorProjects() {
   const [iPreviews, setIPreviews] = useState([]);
@@ -33,6 +34,7 @@ function InnovatorProjects() {
   const { request: addProjects } = useApi("mPost");
   const { request: getInnovatorProjects } = useApi("hget");
   const { request: deleteInnovatorProject } = useApi("delete");
+  const { request: editInnovatorProject } = useApi("mput");
 
   const [photo, setPhoto] = useState(null);
   const [projectData, setProjectData] = useState({
@@ -43,6 +45,8 @@ function InnovatorProjects() {
     end_date: "",
     image: "",
   });
+
+  const [inputValue, setInputValue] = useState("");
 
   console.log(projectData);
 
@@ -72,9 +76,12 @@ function InnovatorProjects() {
     }
   };
 
-  const showEditForm = () => {
+  const showEditForm = (project) => {
     setIsEditForm(true);
     setShow(true);
+    setPhoto(null);
+    console.log(project);
+    setProjectData(project);
   };
 
   const showAddProjectForm = () => {
@@ -151,11 +158,12 @@ function InnovatorProjects() {
     if (actionMeta.action === "create-option") {
       try {
         const url = endpoints.ADD_CATEGORY;
-        const newCategory = { c_name: newValue.value };
+        const newCategory = { c_name: newValue.label };
         const { response, error } = await addCategory(url, newCategory);
         if (!error && response) {
-          setCat([...cat, response.data]);
-          setProjectData({ ...projectData, category: response.data.id });
+          const createdCategory = response.data;
+          setCat([...cat, createdCategory]);
+          setProjectData({ ...projectData, category: createdCategory.id });
         }
       } catch (error) {
         console.log(error);
@@ -207,6 +215,27 @@ function InnovatorProjects() {
     },2500)
   }, []);
 
+  const handleUpdate = async (e) => {
+    const formData = new FormData();
+    formData.append("project_name", projectData.project_name);
+    formData.append("description", projectData.description);
+    formData.append("amount", projectData.amount);
+    formData.append("end_date", projectData.end_date);
+    formData.append("image", projectData.image);
+    formData.append("category", projectData.category);
+    let apiResponse;
+
+    const url = `${endpoints.EDIT_PROJECT}${projectData.id}`;
+    try {
+      const { response, error } = await editInnovatorProject(url, formData);
+      console.log(response);
+      if (!error && response) {
+        alert("Updated Successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -253,7 +282,7 @@ function InnovatorProjects() {
                           </label> */}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={showEditForm}>
+                          <Dropdown.Item onClick={(e) => showEditForm(project)}>
                             Edit
                           </Dropdown.Item>
                           <Dropdown.Item
@@ -325,7 +354,11 @@ function InnovatorProjects() {
                   onChange={handleImage}
                 />
                 <img
-                  src={photo ? URL.createObjectURL(photo) : uploadImage}
+                  src={
+                    photo
+                      ? URL.createObjectURL(photo)
+                      : `http://127.0.0.1:8000/${projectData.image}`
+                  }
                   alt="Cover Image Upload"
                   height={200}
                   className="border border-black p-3"
@@ -397,11 +430,30 @@ function InnovatorProjects() {
                 </FloatingLabel>
               </Col>
             </Row>
-            <CreatableSelect
-              options={options}
-              onChange={handleCategoryChange}
-              placeholder="Select or create category"
-            />
+
+            {isEditForm ? (
+              <CreatableSelect
+                options={options}
+                onChange={handleCategoryChange}
+                onInputChange={(newValue, actionMeta) => {
+                  if (actionMeta.action === "input-change") {
+                    setInputValue(newValue);
+                  }
+                }}
+                placeholder="Select or create category"
+              />
+            ) : (
+              <CreatableSelect
+                options={options}
+                onChange={handleCategoryChange}
+                onInputChange={(newValue, actionMeta) => {
+                  if (actionMeta.action === "input-change") {
+                    setInputValue(newValue);
+                  }
+                }}
+                placeholder="Select or create category"
+              />
+            )}
           </div>
           <hr />
         </Modal.Body>
@@ -409,9 +461,16 @@ function InnovatorProjects() {
           <Button variant="dark" onClick={() => setShow(false)}>
             Close
           </Button>
-          <Button variant="outline-dark" onClick={addProject}>
-            Add
-          </Button>
+
+          {isEditForm ? (
+            <Button variant="outline-dark" onClick={handleUpdate}>
+              Update Project
+            </Button>
+          ) : (
+            <Button variant="outline-dark" onClick={addProject}>
+              Add Project
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
       <ToastContainer />
@@ -420,3 +479,4 @@ function InnovatorProjects() {
 }
 
 export default InnovatorProjects;
+

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./InnovatorHome.css";
 import Aside from "../../CommonComponents/Aside/Aside";
 import LineCart from "./LineCart";
-import { Button, Col, FloatingLabel, Form, InputGroup, Modal, Row, Table } from "react-bootstrap";
-import ProjectList from "./ProjectList";
+import { Button, Col, FloatingLabel, Form, InputGroup, Modal, Row } from "react-bootstrap";
 import { endpoints } from "../../services/defaults";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import useApi from "../../hooks/useApi";
 import CreatableSelect from "react-select/creatable";
+import { Table } from 'react-bootstrap';
 
 
 
@@ -16,8 +16,7 @@ function InnovatorHome() {
   const [vPreviews, setVPreviews] = useState([]);
   const [show, setShow] = useState(false);
   const [cat, setCat] = useState([]);
-  const [innovatorProjects, setInnovatorProjects] = useState([]);
-  const { request: getInnovatorProjects } = useApi("hget");
+  // const [innovatorProjects, setInnovatorProjects] = useState([]);
   const { request: getCategory } = useApi("get");
   const { request: addCategory } = useApi("post");
   const { request: addProjects } = useApi("mPost");
@@ -31,6 +30,24 @@ function InnovatorHome() {
     end_date: "",
     image: "",
   });
+  const { request: getInnovatorProjects } = useApi("hget");
+  const [innovatorProjects, setInnovatorProjects] = useState([]);
+
+  useEffect(() => {
+      getProjects();
+  }, []);
+
+  const getProjects = async () => {
+      try {
+          const url = `${endpoints.GET_INNOVATOR_PROJECTS}`;
+          const { response, error } = await getInnovatorProjects(url);
+          if (!error && response) {
+              setInnovatorProjects(response.data);
+          }
+      } catch (error) {
+          console.log(error);
+      }
+  };
 
   const uploadImage =
   "https://static.vecteezy.com/system/resources/thumbnails/002/058/031/small_2x/picture-icon-photo-symbol-illustration-for-web-and-mobil-app-on-grey-background-free-vector.jpg";
@@ -151,19 +168,7 @@ function InnovatorHome() {
   
     // __________________________________________________________________________________________________________________________________
 
-    const getProjects = async () => {
-      try {
-          const url = `${endpoints.GET_INNOVATOR_PROJECTS}`;
-          const { response, error } = await getInnovatorProjects(url);
-          if (!error && response) {
-              setInnovatorProjects(response.data);
-          }
-      } catch (error) {
-          console.log(error);
-      }
-  };
 
-      // __________________________________________________________________________________________________________________________________
 
   
     useEffect(() => {
@@ -227,7 +232,6 @@ function InnovatorHome() {
                 </tbody>
             </Table>
         </div>
-
         </div>
       </div>
 

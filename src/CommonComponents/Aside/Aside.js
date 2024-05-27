@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 function Aside({asideObj}) {
     
   return (
-    <div  >
+    <div className='aside' >
      <CDBSidebar className='asideBody'>
         <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>
 
