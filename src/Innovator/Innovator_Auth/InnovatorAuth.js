@@ -177,7 +177,7 @@ function InnovatorAuth() {
         if (response.data.data.is_innovator) {
           navigate("/innovator/home");
         } else {
-          navigate("/");
+          navigate("/investor/home");
         }
 
         localStorage.setItem("token", response.data.token);

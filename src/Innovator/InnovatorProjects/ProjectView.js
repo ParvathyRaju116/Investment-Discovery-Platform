@@ -1,21 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, ListGroup, ProgressBar } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  ListGroup,
+  Modal,
+  ProgressBar,
+} from "react-bootstrap";
 import Header from "../../CommonComponents/Header";
 import { Link, useParams } from "react-router-dom";
 import Footer from "../../CommonComponents/Footer/Footer";
 import { endpoints } from "../../services/defaults";
 import useApi from "../../hooks/useApi";
 import "./InnovatorProject.css";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 
 function ProjectView() {
-  const [project, setProject] = useState(null); // Initialize state to null
+  const [project, setProject] = useState(null);
   const { request: projectview } = useApi("get");
   const { id } = useParams();
+  const { request: UpdateProject } = useApi("post");
+
+  const [updateInput, setUpdateInput] = useState({
+    update_message: "",
+  });
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const navObj = [
     { text: "Home", link: "/" },
-    { text: "Projects", link: "/innovator/projects" },
-    { text: "Messages", link: "" },
+    { text: "My Projects", link: "/innovator/projects" },
+    { text: "Messages", link: "/innovator/messages" },
   ];
 
   const getSingleProject = async () => {
@@ -24,18 +40,53 @@ function ProjectView() {
       const apiResponse = await projectview(url);
       const { response, error } = apiResponse;
       if (!error && response) {
-        setProject(response.data[0]); // Assuming response.data is an array
+        setProject(response.data[0]);
       }
     } catch (error) {
       console.error("Failed to fetch project", error);
     }
   };
-
   useEffect(() => {
     getSingleProject();
   }, [id]);
 
-  if (!project) return <div>Loading...</div>; // Loading state
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setUpdateInput({ ...updateInput, [name]: value });
+  };
+
+
+  console.log(updateInput);
+
+  if (!project) return <div>Loading...</div>;
+
+  const handleUpdate=async(e)=>{
+    try {
+      const url = `${endpoints.UPDATE_PROJECT}${id}`;
+      const payload = {
+        update_message:updateInput.update_message
+      };
+      const apiResponse = await UpdateProject(url,payload);
+      console.log(apiResponse);
+      const { response, error } = apiResponse;
+      if (!error && response) {
+        setProject(response.data[0]);
+        toast.success('Project Updations added Successfully', {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+          });
+      }
+    } catch (error) {
+      console.error("Failed to fetch project", error);
+    }
+  }
 
   return (
     <>
@@ -44,13 +95,11 @@ function ProjectView() {
       </div>
       <div className="main-div">
         <Container fluid={"sm"} className="p-3 text-center">
-          <div className="text-start">
-            <Link to={"/innovator/projects"}>
-              <Button variant="outline-dark rounded-0" className="ms-auto">
-                <i className="fa-solid fa-arrow-left"></i> Back
-              </Button>
-            </Link>
+          <div className="text-end">
+            {" "}
+            <Button onClick={handleShow}>Add Updations</Button>
           </div>
+
           <img
             className="img-fluid mb-3"
             src={`http://127.0.0.1:8000/${project.image}`}
@@ -72,6 +121,11 @@ function ProjectView() {
               style={{ height: "30px" }}
               data-bs-theme="dark"
             />
+             <ListGroup className='w-75 mx-auto fw-bold  mb-5'>
+            {project.investors?.map((i, index) =>
+              <ListGroup.Item className='bg-transparent d-flex justify-content-evenly' key={index}>{i.name} <span className='vr mx-4'></span> ₹{i.amount}</ListGroup.Item>)}
+
+          </ListGroup>
             <div className="d-flex justify-content-between mb-3">
               <p>Deadline: {project.end_date || "N/A"}</p>
               <p>
@@ -79,48 +133,38 @@ function ProjectView() {
               </p>
             </div>
           </div>
-          {/* <h3>Investors</h3>
-          <ListGroup className="w-75 mx-auto fw-bold mb-5">
-            {project.investors?.map((i, index) => (
-              <ListGroup.Item
-                className="bg-transparent d-flex justify-content-evenly"
-                key={index}
-              >
-                {i.name} <span className="vr mx-4"></span> ₹{i.amount}
-              </ListGroup.Item>
-            ))}
-          </ListGroup> */}
-          {/* {project.images?.length > 0 && (
-            <>
-              <h3>Images</h3>
-              <div className="scroll-container mb-5">
-                {project.images.map((img, index) => (
-                  <img src={img} alt={`image-${index}`} key={index} height={250} />
-                ))}
-              </div>
-            </>
-          )} */}
-          {/* {project.videos?.length > 0 && (
-            <>
-              <h3>Videos</h3>
-              <div className="scroll-container">
-                {project.videos.map((video, index) => (
-                  <video controls height={250} key={index}>
-                    <source src={video} type="video/mp4" />
-                    <source src={video} type="video/webm" />
-                    <source src={video} type="video/ogg" />
-                    Your browser does not support the video tag.
-                  </video>
-                ))}
-              </div>
-            </>
-          )} */}
         </Container>
       </div>
+
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Updations</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <input
+          className="input-field"
+            type="text"
+            placeholder="Message"
+            name="update_message"
+            value={updateInput.update_message}
+            onChange={handleInput}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={(e)=>handleUpdate(e)}>Save</Button>
+        </Modal.Footer>
+      </Modal>
+      <ToastContainer/>
     </>
   );
 }
 
 export default ProjectView;
-
-

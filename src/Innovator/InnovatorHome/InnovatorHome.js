@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./InnovatorHome.css";
 import Aside from "../../CommonComponents/Aside/Aside";
 import LineCart from "./LineCart";
-import { Button, Col, FloatingLabel, Form, InputGroup, Modal, Row } from "react-bootstrap";
+import { Button, Col, FloatingLabel, Form, InputGroup, Modal, Row, Table } from "react-bootstrap";
 import ProjectList from "./ProjectList";
 import { endpoints } from "../../services/defaults";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import useApi from "../../hooks/useApi";
 import CreatableSelect from "react-select/creatable";
+
 
 
 function InnovatorHome() {
@@ -16,6 +17,7 @@ function InnovatorHome() {
   const [show, setShow] = useState(false);
   const [cat, setCat] = useState([]);
   const [innovatorProjects, setInnovatorProjects] = useState([]);
+  const { request: getInnovatorProjects } = useApi("hget");
   const { request: getCategory } = useApi("get");
   const { request: addCategory } = useApi("post");
   const { request: addProjects } = useApi("mPost");
@@ -37,12 +39,9 @@ function InnovatorHome() {
   const fetchAsideItems = () => {
     const asideObj = [
       { text: "Dashboard", link: "/", icon: "th-large" },
-      {
-        text: "Explore All Projects",
-        link: "/allProjects",
-        icon: "sticky-note",
-      },
+     
       { text: "My Projects", link: "/innovator/projects", icon: "th-large" },
+      { text: "Messages", link: "/innovator/messages" },
     ];
 
     return <Aside asideObj={asideObj} />;
@@ -105,6 +104,7 @@ function InnovatorHome() {
         });
         setShow(false);
         setPhoto(null);
+        getProjects()
       }
     } catch (error) {
       console.log(error);
@@ -150,9 +150,25 @@ function InnovatorHome() {
     };
   
     // __________________________________________________________________________________________________________________________________
+
+    const getProjects = async () => {
+      try {
+          const url = `${endpoints.GET_INNOVATOR_PROJECTS}`;
+          const { response, error } = await getInnovatorProjects(url);
+          if (!error && response) {
+              setInnovatorProjects(response.data);
+          }
+      } catch (error) {
+          console.log(error);
+      }
+  };
+
+      // __________________________________________________________________________________________________________________________________
+
   
     useEffect(() => {
       getCategories();
+      getProjects()
     }, []);
 
   const fetchLineChart = () => {
@@ -178,7 +194,7 @@ function InnovatorHome() {
             <Col  className="home-card text-center ">
               <h4 className="mt-4">No Of Projects</h4>
 
-              <h6>2</h6>
+              <h6>{innovatorProjects.length}</h6>
             </Col>
             <Col className="home-card text-center">
               <h4 className="mt-4">No Of Investors</h4>
@@ -187,7 +203,31 @@ function InnovatorHome() {
             </Col>
           </Row>
 
-          <ProjectList  />
+          <div className='mt-2'>
+            <h3>My Projects</h3>
+            <br />
+            <Table >
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Target Amount</th>
+                        <th>DeadLine</th>
+                        <th>Investors</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {innovatorProjects.map(project => (
+                        <tr key={project.id}>
+                            <td>{project.project_name}</td>
+                            <td>{project.amount}</td>
+                            <td>{project.end_date}</td>
+                            <td>{project.investors}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </div>
+
         </div>
       </div>
 

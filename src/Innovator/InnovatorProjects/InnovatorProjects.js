@@ -19,6 +19,7 @@ import useApi from "../../hooks/useApi";
 import { endpoints } from "../../services/defaults";
 import CreatableSelect from "react-select/creatable";
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import CardSkeleton from "../../CommonComponents/Card Skeleton/CardSkeleton";
 
 function InnovatorProjects() {
   const [iPreviews, setIPreviews] = useState([]);
@@ -44,6 +45,12 @@ function InnovatorProjects() {
   });
 
   console.log(projectData);
+
+  const navObj = [
+    { text: "Home", link: "/" },
+    { text: "My Projects", link: "/innovator/projects" },
+    { text: "Messages", link: "/innovator/messages" },
+  ];
 
   const uploadImage =
     "https://static.vecteezy.com/system/resources/thumbnails/002/058/031/small_2x/picture-icon-photo-symbol-illustration-for-web-and-mobil-app-on-grey-background-free-vector.jpg";
@@ -168,6 +175,7 @@ function InnovatorProjects() {
       const { response, error } = await getInnovatorProjects(url);
       if (!error && response) {
         setInnovatorProjects(response.data);
+        console.log(response.data);
       }
     } catch (error) {
       console.log(error);
@@ -192,16 +200,18 @@ function InnovatorProjects() {
   // __________________________________________________________________________________________________________________________________
 
   useEffect(() => {
-    getCategories();
-    getProjects();
+    
+    setTimeout(()=>{
+      getCategories();
+      getProjects();
+    },2500)
   }, []);
 
-  const handleUpdate = async () => {};
 
   return (
     <>
       <div className="sticky-top">
-        <Header />
+        <Header navObj={navObj} />
       </div>
       <div className="main-div">
         <Container className="p-lg-5 p-2 text-center">
@@ -228,9 +238,10 @@ function InnovatorProjects() {
                             backgroundColor: "transparent",
                             color: "black",
                             border: "0",
+                            position:'realative'
                           }}
                         >
-                          <label className="hamburger">
+                          {/* <label className="hamburger">
                             <input type="checkbox" />
                             <svg viewBox="0 0 32 32">
                               <path
@@ -239,7 +250,7 @@ function InnovatorProjects() {
                               />
                               <path className="line" d="M7 16H27" />
                             </svg>
-                          </label>
+                          </label> */}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item onClick={showEditForm}>
@@ -260,8 +271,8 @@ function InnovatorProjects() {
                         <h3 className="project-title bg-white py-3 text-center mx-auto">
                           {project.project_name}
                         </h3>
-                        <Card.Text>
-                          {project.description.slice(0, 100) + "..."}
+                        <Card.Text style={{textAlign:'justify'}}>
+                          {project.description.slice(0,100) + "..."}
                         </Card.Text>
                         <ProgressBar
                           variant="success"
@@ -286,7 +297,7 @@ function InnovatorProjects() {
                     </Card>
                   </Col>
                 ))
-              : "No projects"}
+              : <CardSkeleton/>}
           </Row>
         </Container>
       </div>

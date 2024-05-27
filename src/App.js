@@ -10,6 +10,7 @@ import InvestorProjects from "./Investor/InvestorProjects/InvestorProjects";
 import InvestorProjectView from "./Investor/InvestorProjects/InvestorProjectView";
 import InnovatorMessages from "./Innovator/InnovatorMessages/InnovatorMessages";
 import InnovatorHome from "./Innovator/InnovatorHome/InnovatorHome";
+import { InvestorHome } from "./Investor/InvestorHome/InvestorHome";
 
 function App() {
   return (
@@ -22,24 +23,15 @@ function App() {
 
         {/* Innovator */}
         <Route path="/innovator/profile" element={<InnovatorProfile />}></Route>
-        <Route
-          path="/innovator/profile-edit"
-          element={<InnovatorProfileEdit />}
-        ></Route>
-        <Route
-          path="/innovator/projects"
-          element={<InnovatorProjects />}
-        ></Route>
-        <Route
-          path="/innovator/messages"
-          element={<InnovatorMessages />}
-        ></Route>
+        <Route path="/innovator/profile-edit" element={<InnovatorProfileEdit />}></Route>
+        <Route path="/innovator/projects" element={<InnovatorProjects />}></Route>
+        <Route path="/innovator/messages" element={<InnovatorMessages />}></Route>
         <Route path="/innovator/home" element={<InnovatorHome />}></Route>
+      
         {/* Investor */}
-        <Route
-          path="/investor/project/id"
-          element={<InvestorProjectView />}
-        ></Route>
+        <Route path="/investor/home" element={<InvestorHome/>}></Route>
+        <Route path="/investor/project" element={<InvestorProjects/>}></Route>=
+        <Route path="/investor/project/id" element={<InvestorProjectView />}></Route>
       </Routes>
     </>
   );
