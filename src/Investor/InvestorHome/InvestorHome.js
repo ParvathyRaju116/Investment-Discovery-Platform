@@ -80,7 +80,7 @@ export const InvestorHome = () => {
                       <Link to={`/projectview/${project.id}`}>
                         <Button
                           variant="outline-dark rounded-0"
-                          className="ms-auto"
+                          className="ms-auto "
                         >
                           <i className="fa-solid fa-arrow-right"></i>
                         </Button>
