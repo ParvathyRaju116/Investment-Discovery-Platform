@@ -90,7 +90,7 @@ export const InvestorHome = () => {
                 </Card>
               </Col>)
               ) : (
-                <></>
+                <div className="text-danger text-center"><b>No Projects Available</b></div>
               )}
             </Row>
           </Container>
