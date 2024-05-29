@@ -3,6 +3,7 @@
 }
 
 .main-div {
+  overflow-x: scroll;
   width: 100%;
   background: radial-gradient(
     ellipse at 20% 80%,

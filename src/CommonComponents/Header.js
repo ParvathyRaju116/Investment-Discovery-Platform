@@ -9,8 +9,31 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../Assets/logo-black.png";
 import { Badge } from "react-bootstrap";
 import Notifications from "./Notifications/Notifications";
+import { Avatar, Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+
+
+
 
 function Header({ navObj }) {
+
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   const [isLogin, setIsLogin] = useState(false);
 
   const login = () => {
@@ -72,17 +95,36 @@ function Header({ navObj }) {
             ))}
           </Nav>
           <Nav>
-            {isLogin && (
-              <Link to={"/"}>
-                <Button
-                onClick={logOut}
-                  variant="dark rounded-5 me-lg-5 me-md-3 ms-auto"
-                  style={{ width: "fit-content", marginLeft: "auto" }}
-                >
-                  Logout
-                </Button>
-              </Link>
-            )}
+
+          {isLogin&&<Box sx={{ flexGrow: 0 }} className="me-3">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+           <MenuItem  onClick={handleCloseUserMenu}>
+                 <Link to={'/profile'} style={{textDecoration:'none',color:'black'}}> <Typography textAlign="center">Profile</Typography></Link>
+                </MenuItem>
+                <MenuItem  onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">LogOut</Typography>
+                </MenuItem>
+            </Menu>
+          </Box>}
+           
           </Nav>
         </Navbar.Collapse>
         <Notifications />

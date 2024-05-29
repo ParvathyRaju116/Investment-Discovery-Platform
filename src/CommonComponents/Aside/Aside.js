@@ -35,7 +35,7 @@ function Aside({asideObj}) {
         </CDBSidebarContent>
 
         <CDBSidebarFooter style={{ textAlign: 'center' }}>
-        <Link style={{textDecoration:'none',color:'white'}} to={'/innovator/profile'}>
+        <Link style={{textDecoration:'none',color:'white'}} to={'/profile'}>
             <div
               className="sidebar-btn-wrapper ms-3"
               style={{padding: '20px 5px'}}

@@ -2,14 +2,22 @@ import React, { useEffect, useState } from "react";
 import "./InnovatorHome.css";
 import Aside from "../../CommonComponents/Aside/Aside";
 import LineCart from "./LineCart";
-import { Button, Col, FloatingLabel, Form, InputGroup, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FloatingLabel,
+  Form,
+  InputGroup,
+  Modal,
+  Row,
+} from "react-bootstrap";
 import { endpoints } from "../../services/defaults";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import useApi from "../../hooks/useApi";
 import CreatableSelect from "react-select/creatable";
-import { Table } from 'react-bootstrap';
-
-
+import { Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { Avatar, AvatarGroup } from "@mui/material";
 
 function InnovatorHome() {
   const [iPreviews, setIPreviews] = useState([]);
@@ -34,31 +42,30 @@ function InnovatorHome() {
   const [innovatorProjects, setInnovatorProjects] = useState([]);
 
   useEffect(() => {
-      getProjects();
+    getProjects();
   }, []);
 
   const getProjects = async () => {
-      try {
-          const url = `${endpoints.GET_INNOVATOR_PROJECTS}`;
-          const { response, error } = await getInnovatorProjects(url);
-          if (!error && response) {
-              setInnovatorProjects(response.data);
-          }
-      } catch (error) {
-          console.log(error);
+    try {
+      const url = `${endpoints.GET_INNOVATOR_PROJECTS}`;
+      const { response, error } = await getInnovatorProjects(url);
+      if (!error && response) {
+        setInnovatorProjects(response.data);
       }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const uploadImage =
-  "https://static.vecteezy.com/system/resources/thumbnails/002/058/031/small_2x/picture-icon-photo-symbol-illustration-for-web-and-mobil-app-on-grey-background-free-vector.jpg";
-
+    "https://static.vecteezy.com/system/resources/thumbnails/002/058/031/small_2x/picture-icon-photo-symbol-illustration-for-web-and-mobil-app-on-grey-background-free-vector.jpg";
 
   const fetchAsideItems = () => {
     const asideObj = [
       { text: "Dashboard", link: "/", icon: "th-large" },
-     
-      { text: "My Projects", link: "/innovator/projects", icon: "th-large" },
-      { text: "Messages", link: "/innovator/messages" },
+
+      { text: "My Projects", link: "/innovator/projects", icon: "columns" },
+      { text: "Messages", link: "/innovator/messages", icon: "envelope" },
     ];
 
     return <Aside asideObj={asideObj} />;
@@ -76,15 +83,12 @@ function InnovatorHome() {
     }
   };
 
+  // ADD PROJECTS
 
-    // ADD PROJECTS
-
-
-    const handleInput = (e) => {
-      const { name, value } = e.target;
-      setProjectData({ ...projectData, [name]: value });
-    };
-
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setProjectData({ ...projectData, [name]: value });
+  };
 
   const addProject = async () => {
     const formData = new FormData();
@@ -121,67 +125,62 @@ function InnovatorHome() {
         });
         setShow(false);
         setPhoto(null);
-        getProjects()
+        getProjects();
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-    // HANDLE IMAGE
+  // HANDLE IMAGE
 
-    const handleImage = (e) => {
-      const file = e.target.files[0];
-      setPhoto(file);
-      setProjectData((prevDetails) => ({
-        ...prevDetails,
-        image: file,
-      }));
-    };
-  
-    // __________________________________________________________________________________________________________________________________
-  
-    // ADD CATEGORY
-  
-    const options = cat.map((category) => ({
-      value: category.id,
-      label: category.c_name,
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    setPhoto(file);
+    setProjectData((prevDetails) => ({
+      ...prevDetails,
+      image: file,
     }));
-  
-    const handleCategoryChange = async (newValue, actionMeta) => {
-      if (actionMeta.action === "create-option") {
-        try {
-          const url = endpoints.ADD_CATEGORY;
-          const newCategory = { c_name: newValue.value };
-          const { response, error } = await addCategory(url, newCategory);
-          if (!error && response) {
-            setCat([...cat, response.data]);
-            setProjectData({ ...projectData, category: response.data.id });
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      } else if (actionMeta.action === "select-option") {
-        setProjectData({ ...projectData, category: newValue.value });
-      }
-    };
-  
-    // __________________________________________________________________________________________________________________________________
-
-
-
-  
-    useEffect(() => {
-      getCategories();
-      getProjects()
-    }, []);
-
-  const fetchLineChart = () => {
-    return <LineCart />;
   };
+
+  // __________________________________________________________________________________________________________________________________
+
+  // ADD CATEGORY
+
+  const options = cat.map((category) => ({
+    value: category.id,
+    label: category.c_name,
+  }));
+
+  const handleCategoryChange = async (newValue, actionMeta) => {
+    if (actionMeta.action === "create-option") {
+      try {
+        const url = endpoints.ADD_CATEGORY;
+        const newCategory = { c_name: newValue.value };
+        const { response, error } = await addCategory(url, newCategory);
+        if (!error && response) {
+          setCat([...cat, response.data]);
+          setProjectData({ ...projectData, category: response.data.id });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (actionMeta.action === "select-option") {
+      setProjectData({ ...projectData, category: newValue.value });
+    }
+  };
+
+  // __________________________________________________________________________________________________________________________________
+
+  useEffect(() => {
+    getCategories();
+    getProjects();
+  }, []);
+
+  
   return (
     <>
-      <div className="main-grid ">
+      <div className="main-grid " style={{overflowX:'scroll'}}>
         <div> {fetchAsideItems()}</div>
         <div className="p-5">
           <Row>
@@ -189,14 +188,18 @@ function InnovatorHome() {
               <h4>Add Project</h4>
               <p style={{ textAlign: "justify" }}>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia
-                recusandae Lorem ipsum dolor ament 
+                recusandae Lorem ipsum dolor ament
               </p>
-              <button  onClick={() => setShow(true)}  className="text-danger" style={{backgroundColor:'transparent',border:'0'}}>
+              <button
+                onClick={() => setShow(true)}
+                className="text-danger"
+                style={{ backgroundColor: "transparent", border: "0" }}
+              >
                 <i class="fa-solid fa-plus"></i> CREATE NEW PROJECT
               </button>
             </Col>
 
-            <Col  className="home-card text-center ">
+            <Col className="home-card text-center ">
               <h4 className="mt-4">No Of Projects</h4>
 
               <h6>{innovatorProjects.length}</h6>
@@ -208,30 +211,80 @@ function InnovatorHome() {
             </Col>
           </Row>
 
-          <div className='mt-2'>
+          <div className="mt-2">
             <h3>My Projects</h3>
             <br />
-            <Table >
-                <thead>
+            {innovatorProjects.length > 0 ? (
+              <>
+                <Table>
+                  <thead>
                     <tr>
-                        <th>Project Name</th>
-                        <th>Target Amount</th>
-                        <th>DeadLine</th>
-                        <th>Investors</th>
+                      <th>Project Name</th>
+                      <th>Target Amount</th>
+                      <th>DeadLine</th>
+                      <th>Investors</th>
                     </tr>
-                </thead>
-                <tbody>
-                    {innovatorProjects.map(project => (
-                        <tr key={project.id}>
-                            <td>{project.project_name}</td>
-                            <td>{project.amount}</td>
-                            <td>{project.end_date}</td>
-                            <td>{project.investors}</td>
-                        </tr>
+                  </thead>
+                  <tbody>
+                    {innovatorProjects.slice(0, 8).map((project) => (
+                      <tr key={project.id}>
+                        <td>{project.project_name}</td>
+                        <td>{project.amount}</td>
+                        <td>{project.end_date}</td>
+                        <td style={{alignItems:'center'}}>
+                          {" "}
+                          <AvatarGroup   sx={{ width: 24, height: 24 }}>
+                            <Avatar
+                             sx={{ width: 30, height: 30 }}
+                              alt="Remy Sharp"
+                              src="/static/images/avatar/1.jpg"
+                            />
+                            <Avatar
+                             sx={{ width: 30, height: 30 }}
+                              alt="Travis Howard"
+                              src="/static/images/avatar/2.jpg"
+                            />
+                            <Avatar
+                             sx={{ width: 30, height: 30 }}
+                              alt="Cindy Baker"
+                              src="/static/images/avatar/3.jpg"
+                            />
+                            <Avatar
+                             sx={{ width: 30, height: 30 }}
+                              alt="Agnes Walker"
+                              src="/static/images/avatar/4.jpg"
+                            />
+                            <Avatar
+                             sx={{ width: 30, height: 30 }}
+                              alt="Trevor Henderson"
+                              src="/static/images/avatar/5.jpg"
+                            />
+                          </AvatarGroup>
+                        </td>
+                      </tr>
                     ))}
-                </tbody>
-            </Table>
-        </div>
+                  </tbody>
+                </Table>
+
+                <Link to={"/innovator/projects"}>
+                  {" "}
+                  <div className="text-end mt-5">
+                    <p>
+                      View All Projects{" "}
+                      <i class="fa-solid fa-arrow-right fa-beat"></i>
+                    </p>
+                  </div>
+                </Link>
+              </>
+            ) : (
+              <div className="text-danger text-center mt-5">
+                {" "}
+                <p>
+                  <b>No Projects Added Yet ...!</b>
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

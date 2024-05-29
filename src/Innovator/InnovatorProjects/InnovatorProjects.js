@@ -29,6 +29,7 @@ function InnovatorProjects() {
   const [cat, setCat] = useState([]);
   const [innovatorProjects, setInnovatorProjects] = useState([]);
   const [isEditForm, setIsEditForm] = useState(false);
+  const [loading, setLoading] = useState(true); 
   const { request: getCategory } = useApi("get");
   const { request: addCategory } = useApi("post");
   const { request: addProjects } = useApi("mPost");
@@ -51,8 +52,8 @@ function InnovatorProjects() {
   console.log(projectData);
 
   const navObj = [
-    { text: "Home", link: "/" },
-    { text: "My Projects", link: "/innovator/projects" },
+    { text: "Home", link: "/"},
+    { text: "My Projects", link: "/innovator/projects",},
     { text: "Messages", link: "/innovator/messages" },
   ];
 
@@ -210,6 +211,7 @@ function InnovatorProjects() {
   useEffect(() => {
     
     setTimeout(()=>{
+      setLoading(false);
       getCategories();
       getProjects();
     },2500)
@@ -242,7 +244,7 @@ function InnovatorProjects() {
       <div className="sticky-top">
         <Header navObj={navObj} />
       </div>
-      <div className="main-div">
+      <div className="main-div ">
         <Container className="p-lg-5 p-2 text-center">
           <Button
             onClick={showAddProjectForm}
@@ -256,77 +258,70 @@ function InnovatorProjects() {
           </Button>
 
           <Row>
-            {innovatorProjects.length > 0
-              ? innovatorProjects.map((project, index) => (
-                  <Col lg={4} sm={6} className="p-3" key={index}>
-                    <Card className="rounded-0 border-0 text-black grey-card">
-                      <Dropdown className="text-end">
-                        <Dropdown.Toggle
-                          style={{
-                            textDecoration: "none",
-                            backgroundColor: "transparent",
-                            color: "black",
-                            border: "0",
-                            position:'realative'
-                          }}
+            {loading ? (
+              <CardSkeleton />
+            ) : innovatorProjects.length > 0 ? (
+              innovatorProjects.map((project, index) => (
+                <Col lg={4} sm={6} className="p-3" key={index}>
+                  <Card className="rounded-0 border-0 text-black grey-card">
+                    <Dropdown className="text-end">
+                      <Dropdown.Toggle
+                        style={{
+                          textDecoration: "none",
+                          backgroundColor: "transparent",
+                          color: "black",
+                          border: "0",
+                          position: 'realative'
+                        }}
+                      ></Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={(e) => showEditForm(project)}>
+                          Edit
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={(e) => handleDelete(e, project.id)}
                         >
-                          {/* <label className="hamburger">
-                            <input type="checkbox" />
-                            <svg viewBox="0 0 32 32">
-                              <path
-                                className="line line-top-bottom"
-                                d="M27 10H13C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6V26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22H7"
-                              />
-                              <path className="line" d="M7 16H27" />
-                            </svg>
-                          </label> */}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                          <Dropdown.Item onClick={(e) => showEditForm(project)}>
-                            Edit
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={(e) => handleDelete(e, project.id)}
-                          >
-                            Delete
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                      <Card.Img
-                        src={`http://127.0.0.1:8000/${project.image}`}
-                        className="project-image rounded-0 m-0"
+                          Delete
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    <Card.Img
+                      src={`http://127.0.0.1:8000/${project.image}`}
+                      className="project-image rounded-0 m-0"
+                    />
+                    <Card.Body className="m-0">
+                      <h3 className="project-title bg-white py-3 text-center mx-auto">
+                        {project.project_name}
+                      </h3>
+                      <Card.Text style={{ textAlign: 'justify' }}>
+                        {project.description.slice(0, 100) + "..."}
+                      </Card.Text>
+                      <ProgressBar
+                        variant="success"
+                        className="striped"
+                        now={(project.amount_raised / project.amount) * 100}
+                        label={`₹${project.amount_raised}`}
+                        title={`₹${project.amount_raised} / ₹${project.amount}`}
+                        data-bs-theme="dark"
                       />
-                      <Card.Body className="m-0">
-                        <h3 className="project-title bg-white py-3 text-center mx-auto">
-                          {project.project_name}
-                        </h3>
-                        <Card.Text style={{textAlign:'justify'}}>
-                          {project.description.slice(0,100) + "..."}
-                        </Card.Text>
-                        <ProgressBar
-                          variant="success"
-                          className="striped"
-                          now={(project.amount_raised / project.amount) * 100}
-                          label={`₹${project.amount_raised}`}
-                          title={`₹${project.amount_raised} / ₹${project.amount}`}
-                          data-bs-theme="dark"
-                        />
-                        <small>Target: ₹{project.amount}</small>
-                        <div className="text-end">
-                          <Link to={`/projectview/${project.id}`}>
-                            <Button
-                              variant="outline-dark rounded-0"
-                              className="ms-auto"
-                            >
-                              <i className="fa-solid fa-arrow-right"></i>
-                            </Button>
-                          </Link>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))
-              : <CardSkeleton/>}
+                      <small>Target: ₹{project.amount}</small>
+                      <div className="text-end">
+                        <Link to={`/projectview/${project.id}`}>
+                          <Button
+                            variant="outline-dark rounded-0"
+                            className="ms-auto"
+                          >
+                            <i className="fa-solid fa-arrow-right"></i>
+                          </Button>
+                        </Link>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))
+            ) : (
+             <div className="text-danger text-center mt-5"> <p><b>No Projects Added Yet ...!</b></p></div>
+            )}
           </Row>
         </Container>
       </div>

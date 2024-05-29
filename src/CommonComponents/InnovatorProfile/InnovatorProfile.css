@@ -43,6 +43,11 @@
     width: 230px;
     border-radius: 50%;
   }
+  .input-field{
+    border-radius: 5px;
+    padding: 1.5%;
+
+  }
 
   @media ((max-width:1399px) and (min-width:996px)){
 .details{

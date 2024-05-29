@@ -4,10 +4,14 @@ export const endpoints = {
 
   // common
   LOGIN:`login/`,
+  PROFILE:`profileview/`,
+  EDIT_PROFILE:`user/profile/update/`,
 
 
 // Investor
   INVESTOR_REGISTERATION:`invester/register/`,
+  GET_PROJECTS:`api/projectlist/`,
+
 
   // Innovator
 
