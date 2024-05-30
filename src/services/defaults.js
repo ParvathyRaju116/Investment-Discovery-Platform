@@ -11,6 +11,7 @@ export const endpoints = {
 // Investor
   INVESTOR_REGISTERATION:`invester/register/`,
   GET_PROJECTS:`api/projectlist/`,
+  ADD_INTEREST:`project/notify/`,
 
 
   // Innovator
