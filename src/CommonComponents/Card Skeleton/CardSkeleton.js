@@ -45,6 +45,45 @@ function CardSkeleton() {
             </Col>
            
           </Row>
+          <Row>
+            <Col>
+              <Box sx={{ width: 300 }}>
+                <Skeleton
+                  variant="rectangular"
+                  width={400}
+                  height={200}
+                  animation="wave"
+                />
+                <Skeleton animation={false} />
+                <Skeleton width="60%" />
+              </Box>
+            </Col>
+            <Col>
+              <Box sx={{ width: 300 }}>
+                <Skeleton
+                  variant="rectangular"
+                  width={400}
+                  height={200}
+                  animation="wave"
+                />
+                <Skeleton animation={false} />
+                <Skeleton width="60%" />
+              </Box>
+            </Col>
+            <Col>
+              <Box sx={{ width: 300 }}>
+                <Skeleton
+                  variant="rectangular"
+                  width={400}
+                  height={200}
+                  animation="wave"
+                />
+                <Skeleton animation={false} />
+                <Skeleton width="60%" />
+              </Box>
+            </Col>
+           
+          </Row>
         </Container>
     </div>
   )
