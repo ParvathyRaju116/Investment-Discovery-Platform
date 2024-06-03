@@ -16,7 +16,7 @@ export const InvestorHome = () => {
 
   const navObj = [
     { text: "Home", link: "/" },
-    { text: "My Projects", link: "/innovator/projects" },
+    { text: "My Projects", link: "/investor/projects" },
     { text: "Messages", link: "/innovator/messages" },
   ];
 

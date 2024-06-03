@@ -29,7 +29,7 @@ function InnovatorProjects() {
   const [cat, setCat] = useState([]);
   const [innovatorProjects, setInnovatorProjects] = useState([]);
   const [isEditForm, setIsEditForm] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const { request: getCategory } = useApi("get");
   const { request: addCategory } = useApi("post");
   const { request: addProjects } = useApi("mPost");
@@ -52,8 +52,8 @@ function InnovatorProjects() {
   console.log(projectData);
 
   const navObj = [
-    { text: "Home", link: "/"},
-    { text: "My Projects", link: "/innovator/projects",},
+    { text: "Home", link: "/" },
+    { text: "My Projects", link: "/innovator/projects" },
     { text: "Messages", link: "/innovator/messages" },
   ];
 
@@ -209,12 +209,11 @@ function InnovatorProjects() {
   // __________________________________________________________________________________________________________________________________
 
   useEffect(() => {
-    
-    setTimeout(()=>{
+    setTimeout(() => {
       setLoading(false);
       getCategories();
       getProjects();
-    },2500)
+    }, 1000);
   }, []);
 
   const handleUpdate = async (e) => {
@@ -258,9 +257,7 @@ function InnovatorProjects() {
           </Button>
 
           <Row>
-            {loading ? (
-              <CardSkeleton />
-            ) : innovatorProjects.length > 0 ? (
+            {innovatorProjects.length > 0 ? (
               innovatorProjects.map((project, index) => (
                 <Col lg={4} sm={6} className="p-3" key={index}>
                   <Card className="rounded-0 border-0 text-black grey-card">
@@ -271,7 +268,7 @@ function InnovatorProjects() {
                           backgroundColor: "transparent",
                           color: "black",
                           border: "0",
-                          position: 'realative'
+                          position: "realative",
                         }}
                       ></Dropdown.Toggle>
                       <Dropdown.Menu>
@@ -293,7 +290,7 @@ function InnovatorProjects() {
                       <h3 className="project-title bg-white py-3 text-center mx-auto">
                         {project.project_name}
                       </h3>
-                      <Card.Text style={{ textAlign: 'justify' }}>
+                      <Card.Text style={{ textAlign: "justify" }}>
                         {project.description.slice(0, 100) + "..."}
                       </Card.Text>
                       <ProgressBar
@@ -320,7 +317,12 @@ function InnovatorProjects() {
                 </Col>
               ))
             ) : (
-             <div className="text-danger text-center mt-5"> <p><b>No Projects Added Yet ...!</b></p></div>
+              <div className="text-danger text-center mt-5">
+                {" "}
+                <p>
+                  <b>No Projects Added Yet ...!</b>
+                </p>
+              </div>
             )}
           </Row>
         </Container>
@@ -474,4 +476,3 @@ function InnovatorProjects() {
 }
 
 export default InnovatorProjects;
-

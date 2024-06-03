@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer/Footer";
 import { Col, Container, Row } from "react-bootstrap";
@@ -7,11 +7,14 @@ import investment from "../Assets/Investment.jpg";
 import About from "./About";
 import Services from "./Services";
 import Reviews from "./Reviews";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 
 
 function Home() {
+  const navigate =useNavigate()
+  const [isLogin,setIsLogin]=useState(true)
   const fetchNavObj = () => {
     const navObj = [
       { text: "Home", link: "/" },
@@ -20,6 +23,11 @@ function Home() {
 
     return <Header navObj={navObj} />;
   };
+
+     if(localStorage.getItem("token")){
+      setIsLogin(false)
+     }
+
 
   return (
     <>
@@ -38,11 +46,11 @@ function Home() {
               discovery platform, empowering you to make informed decisions and
               maximize returns.
             </p>
-           <Link to={'/auth'}>
+         {isLogin&&  <Link to={'/auth'}>
               <button className="button p-2">
                 Get Started <i class="fa-solid fa-angles-right"></i>
               </button>
-           </Link>
+           </Link>}
           </Col>
           <Col lg={6} className="p-5">
             <img className="investment-img" src={investment} alt="" />

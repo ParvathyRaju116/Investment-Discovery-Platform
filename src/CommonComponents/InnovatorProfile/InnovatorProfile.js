@@ -43,10 +43,13 @@ function InnovatorProfile() {
           <div>
             <img
               className="Profile-Img"
-              src={profile?.profile_pic?`http://127.0.0.1:8000/${profile.profile_pic}`:"https://i.postimg.cc/rmJJBbDx/istockphoto-1332100919-612x612.jpg"}
+              src={
+                profile?.profile_pic
+                  ? `http://127.0.0.1:8000/${profile.profile_pic}`
+                  : "https://i.postimg.cc/rmJJBbDx/istockphoto-1332100919-612x612.jpg"
+              }
               alt=""
             />
-
           </div>{" "}
         </Col>
         <Col lg={8} className="details">
@@ -64,12 +67,23 @@ function InnovatorProfile() {
             </Col>
             <Col lg={3} className="align-item-center justify-content-center ">
               <div className="fs-3 d-flex mt-2 social-media-icons ">
-               <a > <i class="fa-brands fa-instagram"></i></a>
-                <a href={profile?.twitter} style={{color:'black'}}><i class="fa-brands fa-square-x-twitter ms-4"></i></a>
-              <a href={profile?.linkedin}  style={{color:'black'}}>  <i class="fa-brands fa-linkedin ms-4"></i></a>
-              <a href={profile?.web}  style={{color:'black'}}>  <i class="fa-solid fa-link ms-4"></i></a>
+                <a href={profile?.instagram}>
+                  {" "}
+                  <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href={profile?.twitter} style={{ color: "black" }}>
+                  <i class="fa-brands fa-square-x-twitter ms-4"></i>
+                </a>
+                <a href={profile?.linkedin} style={{ color: "black" }}>
+                  {" "}
+                  <i class="fa-brands fa-linkedin ms-4"></i>
+                </a>
+                <a href={profile?.web} style={{ color: "black" }}>
+                  {" "}
+                  <i class="fa-solid fa-link ms-4"></i>
+                </a>
               </div>
-              <div className="text-center mt-4">
+              <div className="text-center mt-4 d-flex">
                 <Link
                   to={"/innovator/profile-edit"}
                   style={{ textDecoration: "none" }}

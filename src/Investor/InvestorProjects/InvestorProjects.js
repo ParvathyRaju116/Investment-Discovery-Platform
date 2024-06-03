@@ -25,7 +25,7 @@ function InvestorProjects() {
 
   const getAllProjects = async () => {
     try {
-      const url = `${endpoints.GET_ALL_PROJECTS}`;
+      const url = `${endpoints.GET_PROJECTS}`;
       const apiResponse = await getProjects(url);
       const { response, error } = apiResponse;
       if (!error && response) {

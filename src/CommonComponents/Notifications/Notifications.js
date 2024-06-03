@@ -7,9 +7,12 @@ import Avatar from "@mui/material/Avatar";
 import CloseIcon from "@mui/icons-material/Close";
 import "./Notifications.css";
 import { Box, IconButton, Button as MuiButton } from "@mui/material";
+import useApi from "../../hooks/useApi";
+import { endpoints } from "../../services/defaults";
 
 function Notifications() {
   const [open, setOpen] = React.useState(false);
+  const { request: getNotification } = useApi("hget");
   const [notifications, setNotifications] = useState([]);
 
   const handleClick = () => {
@@ -37,95 +40,36 @@ function Notifications() {
     </React.Fragment>
   );
 
-  
-
-  const fetchNotifications = [
-    {
-      userId: "1",
-      name: "Notification 1",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-    {
-      userId: "1",
-      name: "Notification 2",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-    {
-      userId: "1",
-      name: "Notification ",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-    {
-      userId: "1",
-      name: "Notification 2",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-    {
-      userId: "1",
-      name: "Notification 2",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-    {
-      userId: "1",
-      name: "Notification 2",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-    {
-      userId: "1",
-      name: "Notification 2",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-    {
-      userId: "1",
-      name: "Notification 2",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-    {
-      userId: "1",
-      name: "Notification 2",
-      avatar:
-        "https://i.postimg.cc/28jmQ1gd/head-shot-portrait-close-smiling-600nw-1714666150.webp",
-      content:
-        "    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim dicta, laborum et dolore quis consequatur, laudantium dolor aspernatur, at suscipit quidem minima illum corrupti iure ipsum voluptatem commodi possimus in.",
-    },
-  ];
+  const handleNotifications = async () => {
+    try {
+      let apiResponse;
+      const url = `${endpoints.GET_NOTIFICATION}`;
+      apiResponse = await getNotification(url);
+      const { response, error } = apiResponse;
+      console.log(apiResponse, "notification");
+      if (!error && response) {
+        setNotifications(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    handleNotifications();
+  }, []);
 
   return (
     <div>
       <Badge
         onClick={handleClick}
         className="fs-2 me-4"
-        badgeContent={fetchNotifications.length}
+        badgeContent={notifications.length}
         color="primary"
       >
         <i class="fa-regular fa-bell"></i>
       </Badge>
       <Snackbar
-        className="mt-5 snackbar"
+        className=" snackbar"
         open={open}
         onClose={handleClose}
         anchorOrigin={{
@@ -134,27 +78,25 @@ function Notifications() {
         }}
         message={
           <>
-            {fetchNotifications.map((i, index) => (
+            {notifications?.map((i, index) => (
               <div key={index}>
                 <Row>
-                  <Col lg={1}>
+                  <Col lg={2}>
                     <Avatar alt="Remy Sharp" src={i.avatar} />
-                    
                   </Col>
-                  <Col lg={11}>
-                    <h6 className="">{i.name}</h6>
-                    <p>{`${i.content.substring(0, 80)}${
+                  <Col lg={10}>
+                    <h6 className="ms-4 mt-2">{i.full_name}</h6>
+                    {/* <p>{`${i.content.substring(0, 80)}${
                       i.content.length > 80 ? "..." : ""
-                    }`}</p>                    
+                    }`}</p>                     */}
                   </Col>
-                  
                 </Row>
                 <hr />
               </div>
             ))}
             <div className="snackbar-buttons">
               <button className="button p-2" size="small">
-               <b> Clear All</b>
+                <b> Clear All</b>
               </button>
               <button
                 className="button p-2"
@@ -162,7 +104,7 @@ function Notifications() {
                 aria-label="close"
                 onClick={handleClose}
               >
-               <b> Close</b>
+                <b> Close</b>
               </button>
             </div>
           </>

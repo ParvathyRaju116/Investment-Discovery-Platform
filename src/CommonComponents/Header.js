@@ -18,6 +18,7 @@ function Header({ navObj }) {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate=useNavigate()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,7 +46,7 @@ function Header({ navObj }) {
   const logOut = () => {
     setIsLogin(false)
     localStorage.removeItem("token")
-
+   navigate("/")
   };
 
   useEffect(() => {
@@ -120,14 +121,15 @@ function Header({ navObj }) {
                  <Link to={'/profile'} style={{textDecoration:'none',color:'black'}}> <Typography textAlign="center">Profile</Typography></Link>
                 </MenuItem>
                 <MenuItem  onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">LogOut</Typography>
+               <div onClick={logOut}>   <Typography textAlign="center" >LogOut</Typography></div>
                 </MenuItem>
             </Menu>
           </Box>}
            
           </Nav>
+          <Notifications />
+
         </Navbar.Collapse>
-        <Notifications />
       </Container>
     </Navbar>
   );

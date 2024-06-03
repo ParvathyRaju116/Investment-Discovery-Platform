@@ -65,7 +65,7 @@ function InnovatorHome() {
       { text: "Dashboard", link: "/", icon: "th-large" },
 
       { text: "My Projects", link: "/innovator/projects", icon: "columns" },
-      { text: "Messages", link: "/innovator/messages", icon: "envelope" },
+      { text: "Messages", link: "/innovator/messages", icon: "envelope" }
     ];
 
     return <Aside asideObj={asideObj} />;

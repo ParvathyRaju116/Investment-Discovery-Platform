@@ -139,9 +139,8 @@ function InnovatorProfileEdit() {
                 <img
                   className="edit-profile-img"
                   src={
-                    photo || profile.profile_pic
-                      ? `http://127.0.0.1:8000/${profile.profile_pic}`
-                      : "https://i.postimg.cc/rmJJBbDx/istockphoto-1332100919-612x612.jpg"
+                    photo ? photo : `http://127.0.0.1:8000/${profile.profile_pic}` || "https://i.postimg.cc/R03PjdB0/istockphoto-1332100919-612x612.jpg"
+                      
                   }
                   alt=""
                 />
@@ -192,14 +191,17 @@ function InnovatorProfileEdit() {
               <Col>
                 <input
                   onChange={handleInputChange}
-                  name=""
-                  type="text"
+                  type="date"
                   className="input-field mt-2 w-100"
                   placeholder="Date Of Birth"
+                  name="dob"
+                  value={profile?.dob}
                 />
               </Col>
               <Col>
                 <input
+                  name="gender"
+                  value={profile?.gender}
                   onChange={handleInputChange}
                   type="text"
                   className="input-field w-100 mt-2"
@@ -250,8 +252,8 @@ function InnovatorProfileEdit() {
 
         <textarea
           onChange={handleInputChange}
-          value={profile?.country || ""}
-          name="country"
+          value={profile?.address || ""}
+          name="address"
           type="text"
           className="input-field mt-2 w-100"
           placeholder="Address"
@@ -264,6 +266,9 @@ function InnovatorProfileEdit() {
         <Row>
           <Col>
             <input
+             name="instagram"
+             value={profile?.instagram}
+             onChange={handleInputChange}
               type="text"
               className="input-field mt-2 w-100"
               placeholder="Instagram"
