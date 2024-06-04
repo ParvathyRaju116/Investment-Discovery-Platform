@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home/>} />
         <Route path="/auth" element={<InnovatorAuth />}></Route>
         <Route path="/projectview/:id" element={<ProjectView />} />
         <Route path="/allProjects" element={<InvestorProjects />}></Route>

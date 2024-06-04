@@ -24,9 +24,7 @@ function Home() {
     return <Header navObj={navObj} />;
   };
 
-     if(localStorage.getItem("token")){
-      setIsLogin(false)
-     }
+
 
 
   return (
@@ -46,11 +44,11 @@ function Home() {
               discovery platform, empowering you to make informed decisions and
               maximize returns.
             </p>
-         {isLogin&&  <Link to={'/auth'}>
+          <Link to={'/auth'}>
               <button className="button p-2">
                 Get Started <i class="fa-solid fa-angles-right"></i>
               </button>
-           </Link>}
+           </Link>
           </Col>
           <Col lg={6} className="p-5">
             <img className="investment-img" src={investment} alt="" />
