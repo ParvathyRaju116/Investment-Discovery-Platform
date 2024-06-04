@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./InnovatorMessages.css";
-import Header from "../../CommonComponents/Header";
 import { Form, useSearchParams } from "react-router-dom";
 import {
   Button,
@@ -9,6 +8,7 @@ import {
   ListGroup,
   Spinner,
 } from "react-bootstrap";
+import Header from "../../CommonComponents/Header/Header";
 function InnovatorMessages() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [id, setId] = useState("");

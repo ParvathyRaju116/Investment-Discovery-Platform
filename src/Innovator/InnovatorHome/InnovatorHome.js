@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./InnovatorHome.css";
 import Aside from "../../CommonComponents/Aside/Aside";
-import LineCart from "./LineCart";
 import {
   Button,
   Col,

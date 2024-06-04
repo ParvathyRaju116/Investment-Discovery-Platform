@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Home from "./CommonComponents/Home";
-import InnovatorAuth from "./Innovator/Innovator_Auth/InnovatorAuth";
+import Home from "./CommonComponents/Home/Home";
+import InnovatorAuth from "./CommonComponents/Innovator_Auth/InnovatorAuth";
 import InnovatorProfile from "./CommonComponents/InnovatorProfile/InnovatorProfile";
 import InnovatorProfileEdit from "./CommonComponents/InnovatorProfile/InnovatorProfileEdit";
 import InnovatorProjects from "./Innovator/InnovatorProjects/InnovatorProjects";

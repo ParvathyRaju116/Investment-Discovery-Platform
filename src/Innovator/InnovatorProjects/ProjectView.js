@@ -6,14 +6,13 @@ import {
   Modal,
   ProgressBar,
 } from "react-bootstrap";
-import Header from "../../CommonComponents/Header";
 import { Link, useParams } from "react-router-dom";
-import Footer from "../../CommonComponents/Footer/Footer";
 import { endpoints } from "../../services/defaults";
 import useApi from "../../hooks/useApi";
 import "./InnovatorProject.css";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import CardSkeleton from "../../CommonComponents/Card Skeleton/CardSkeleton";
+import Header from "../../CommonComponents/Header/Header";
 
 function ProjectView() {
   const [project, setProject] = useState(null);

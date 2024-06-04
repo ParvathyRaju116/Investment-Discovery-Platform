@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Header from "./Header";
-import Footer from "./Footer/Footer";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 import { Col, Container, Row } from "react-bootstrap";
 import "./Home.css";
-import investment from "../Assets/Investment.jpg";
+import investment from "../../Assets/Investment.jpg";
 import About from "./About";
 import Services from "./Services";
 import Reviews from "./Reviews";

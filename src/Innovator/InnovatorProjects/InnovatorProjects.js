@@ -13,7 +13,6 @@ import {
   Row,
 } from "react-bootstrap";
 import "./InnovatorProject.css";
-import Header from "../../CommonComponents/Header";
 import { Link } from "react-router-dom";
 import useApi from "../../hooks/useApi";
 import { endpoints } from "../../services/defaults";
@@ -21,6 +20,7 @@ import CreatableSelect from "react-select/creatable";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import CardSkeleton from "../../CommonComponents/Card Skeleton/CardSkeleton";
 import { Update } from "@mui/icons-material";
+import Header from "../../CommonComponents/Header/Header";
 
 function InnovatorProjects() {
   const [iPreviews, setIPreviews] = useState([]);

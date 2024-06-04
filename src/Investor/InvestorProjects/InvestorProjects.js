@@ -13,11 +13,11 @@ import {
   Row,
 } from "react-bootstrap";
 import "./InvestorProject.css";
-import Header from "../../CommonComponents/Header";
 import { Link } from "react-router-dom";
 import Footer from "../../CommonComponents/Footer/Footer";
 import useApi from "../../hooks/useApi";
 import { endpoints } from "../../services/defaults";
+import Header from "../../CommonComponents/Header/Header";
 
 function InvestorProjects() {
   const { request: getProjects } = useApi("get");

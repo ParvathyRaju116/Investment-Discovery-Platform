@@ -1,12 +1,12 @@
 import React from 'react'
 import { Button, Container, ListGroup, ProgressBar } from 'react-bootstrap'
-import Header from '../../CommonComponents/Header'
 import './InvestorProject.css'
 import video1 from "../../Assets/ph-video-1.mp4";
 import video2 from "../../Assets/ph-video-2.mp4";
 import video3 from "../../Assets/ph-video-3.mp4";
 import { Link } from 'react-router-dom';
 import Footer from '../../CommonComponents/Footer/Footer';
+import Header from '../../CommonComponents/Header/Header';
 function InvestorProjectView() {
   const project = {
     name: 'project3',

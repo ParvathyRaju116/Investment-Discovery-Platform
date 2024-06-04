@@ -6,9 +6,9 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../Assets/logo-black.png";
+import logo from "../../Assets/logo-black.png";
 import { Badge } from "react-bootstrap";
-import Notifications from "./Notifications/Notifications";
+import Notifications from "../Notifications/Notifications";
 import { Avatar, Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 
 
